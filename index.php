@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Elementis
  * Description: Custom Elementor extension.
- * Plugin URI:  https://elementor.com/
+ * Plugin URI:  https://elementis.codecrud.com/
  * Version:     1.0.0
  * Author:      Aqib
  * Author URI:  https://aqibpandit.com/
@@ -148,11 +148,11 @@ final class Elementis {
 			return;
 		}
 
-        // Add Elementis Widget Category.
-        add_action( 'elementor/elements/categories_registered', [ $this, 'add_elementis_widget_categories' ] );
 		// Add Plugin actions.
 		add_action( 'elementor/widgets/widgets_registered', [ $this, 'init_widgets' ] );
-		// add_action( 'elementor/controls/controls_registered', [ $this, 'init_controls' ] );
+
+		// Add Elementis Widget Category.
+		add_action( 'elementor/elements/categories_registered', [ $this, 'add_elementis_widget_categories' ] );
 	}
 
 	/**
@@ -166,7 +166,11 @@ final class Elementis {
 	 */
 	public function admin_notice_missing_main_plugin() {
 
-		if ( isset( $_GET['activate'] ) ) unset( $_GET['activate'] );
+		if ( isset( $_GET['activate'] ) ) {
+
+			unset( $_GET['activate'] );
+
+		}
 
 		$message = sprintf(
 			/* translators: 1: Plugin name 2: Elementor */
@@ -190,7 +194,11 @@ final class Elementis {
 	 */
 	public function admin_notice_minimum_elementor_version() {
 
-		if ( isset( $_GET['activate'] ) ) unset( $_GET['activate'] );
+		if ( isset( $_GET['activate'] ) ) {
+
+			unset( $_GET['activate'] );
+
+		}
 
 		$message = sprintf(
 			/* translators: 1: Plugin name 2: Elementor 3: Required Elementor version */
@@ -215,7 +223,11 @@ final class Elementis {
 	 */
 	public function admin_notice_minimum_php_version() {
 
-		if ( isset( $_GET['activate'] ) ) unset( $_GET['activate'] );
+		if ( isset( $_GET['activate'] ) ) {
+
+			unset( $_GET['activate'] );
+
+		}
 
 		$message = sprintf(
 			/* translators: 1: Plugin name 2: PHP 3: Required PHP version */
@@ -241,32 +253,32 @@ final class Elementis {
 	public function init_widgets() {
 
 		// Include Widget files.
-		require_once( __DIR__ . '/widgets/greeting-card.php' );
+		require_once __DIR__ . '/widgets/contact-form-7/widget.php';
 
 		// Register widget.
-		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new \Elementis_Greeting_Card() );
+		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new \Elementis_Contact_Form_7() );
 
 	}
 
 	/**
-	 * Init Controls
-	 *
-	 * Include controls files and register them
+	 * Register Widget Category.
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param \Elementor\Elements_Manager $elements_manager Instance of Elements Manager.
+	 *
 	 * @access public
 	 */
-	public function init_controls() {
-
-		// Include Control files.
-		require_once( __DIR__ . '/controls/test-control.php' );
-
-		// Register control.
-		\Elementor\Plugin::$instance->controls_manager->register_control( 'control-type-', new \Test_Control() );
+	public function add_elementis_widget_categories( $elements_manager ) {
+		$elements_manager->add_category(
+			'elementis',
+			[
+				'title' => __( 'Elementis', 'elementis' ),
+				'icon' => 'fa fa-plug',
+			]
+		);
 
 	}
-
 }
 
 Elementis::instance();
