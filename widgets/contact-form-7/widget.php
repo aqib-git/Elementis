@@ -133,15 +133,17 @@ class Elementis_Contact_Form_7 extends \Elementor\Widget_Base {
 	 *
 	 * @return array
 	 */
-	protected function get_contact_forms () {
+	protected function get_contact_forms() {
 
 		$forms = get_posts( [ 'post_type' => 'wpcf7_contact_form' ] );
 
-		$data = [];
-		foreach ( $forms as $form ) {
-			$data[ $form->ID ] = $form->post_name;
-		}
-
-		return $data;
+		return array_reduce(
+			$forms,
+			function ( $carry, $item ) {
+				$carry[ $item->ID ] = $item->post_name;
+				return $carry;
+			},
+			[]
+		);
 	}
 }
